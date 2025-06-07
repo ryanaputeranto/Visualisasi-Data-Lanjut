@@ -1481,7 +1481,7 @@ merge_gcas.to_pickle("merge_gcas.pkl")
 # Step 4: Run the Streamlit app and expose it via LocalTunnel
 st.write("Your IP is:", st.experimental_get_query_params())
 
-!mv "Copy of Midterm Visdat_203012410027_Muhammad Rafi Yanaputeranto_203012410025_Hanif Aditya Pradana_ver2.py" streamlit_app.py
+# !mv "Copy of Midterm Visdat_203012410027_Muhammad Rafi Yanaputeranto_203012410025_Hanif Aditya Pradana_ver2.py" streamlit_app.py
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%writefile requirements.txt
@@ -1491,7 +1491,7 @@ st.write("Your IP is:", st.experimental_get_query_params())
 # seaborn
 # # Add any other packages you used
 
-from google.colab import files
-files.download("streamlit_app.py")
-files.download("requirements.txt")
+# from google.colab import files
+# files.download("streamlit_app.py")
+# files.download("requirements.txt")
 
