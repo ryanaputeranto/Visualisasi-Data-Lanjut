@@ -916,8 +916,6 @@ df_gn[['xG', 'xGA']]
 ## Install Library
 """
 
-!npm install -g localtunnel
-
 """## Mengubah Dataframe Menjadi file pickle"""
 
 # Mengubah tiap dataframe menjadi pickle
