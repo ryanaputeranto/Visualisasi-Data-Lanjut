@@ -9,12 +9,81 @@ Original file is located at
 # Import Library
 """
 
+# !pip install streamlit
+
+import requests
 import pandas as pd
+import streamlit as st
 import numpy as np
 from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
+
+# # 22/23
+# df_s23 = pd.read_html('https://fbref.com/en/squads/e4a775cb/2022-2023/matchlogs/c9/schedule/Nottingham-Forest-Scores-and-Fixtures-Premier-League')[0]
+# df_s23.to_csv('nottingham_22_23.csv', index=False)
+
+# # 23/24
+# df_s24 = pd.read_html('https://fbref.com/en/squads/e4a775cb/2023-2024/matchlogs/c9/schedule/Nottingham-Forest-Scores-and-Fixtures-Premier-League')[0]
+# df_s24.to_csv('nottingham_23_24.csv', index=False)
+
+# # 24/25
+# df_s25 = pd.read_html('https://fbref.com/en/squads/e4a775cb/2024-2025/matchlogs/c9/schedule/Nottingham-Forest-Scores-and-Fixtures-Premier-League')[0]
+# df_s25.to_csv('nottingham_24_25.csv', index=False)
+
+# # Premier League stats (team-based)
+# pd.read_html('https://fbref.com/en/comps/9/defense/Premier-League-Stats')[0].to_csv('pl_defense.csv', index=False)
+# pd.read_html('https://fbref.com/en/comps/9/Premier-League-Stats')[0].to_csv('pl_summary.csv', index=False)
+# pd.read_html('https://fbref.com/en/comps/9/keepers/Premier-League-Stats')[0].to_csv('pl_goalkeeping.csv', index=False)
+# pd.read_html('https://fbref.com/en/comps/9/gca/Premier-League-Stats')[0].to_csv('pl_gca.csv', index=False)
+# pd.read_html('https://fbref.com/en/comps/9/shooting/Premier-League-Stats')[0].to_csv('pl_shooting.csv', index=False)
+# pd.read_html('https://fbref.com/en/comps/9/possession/Premier-League-Stats')[0].to_csv('pl_possession.csv', index=False)
+# pd.read_html('https://fbref.com/en/comps/9/passing/Premier-League-Stats')[0].to_csv('pl_passing.csv', index=False)
+
+# # Player-level shooting stats
+# pd.read_html('https://fbref.com/en/comps/Big5/shooting/players/Big-5-European-Leagues-Stats')[0].to_csv('players_shooting.csv', index=False)
+
+@st.cache_data
+def load_and_clean_forest(filepath, season_prefix):
+    df = pd.read_csv(filepath)
+    df = df.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'], errors='ignore')
+    df = df.dropna()
+    df['Round'] = df['Round'].str.replace('Matchweek ', f'{season_prefix}_', regex=False)
+    df['Round'] = df['Round'].astype(str)
+    df.set_index('Round', inplace=True)
+    return df
+
+@st.cache_data
+def load_csv(filepath):
+    return pd.read_csv(filepath)
+
+# Load Match Logs
+df_s23 = load_and_clean_forest('nottingham_22_23.csv', '22/23')
+df_s24 = load_and_clean_forest('nottingham_23_24.csv', '23/24')
+df_s25 = load_and_clean_forest('nottingham_24_25.csv', '24/25')
+
+# Load PL Stats
+df_defend = load_csv('pl_defense.csv')
+df_ss     = load_csv('pl_summary.csv')
+df_gk     = load_csv('pl_goalkeeping.csv')
+df_gca    = load_csv('pl_gca.csv')
+df_sh     = load_csv('pl_shooting.csv')
+df_ps     = load_csv('pl_possession.csv')
+df_pass   = load_csv('pl_passing.csv')
+
+# Load Player Shooting
+df_shooting = load_csv('players_shooting.csv')
+
+# Example preview in Streamlit
+st.header("Nottingham Forest 22/23")
+st.dataframe(df_s23.head())
+
+st.header("Premier League Summary")
+st.dataframe(df_ss.head())
+
+st.header("Big 5 Players Shooting")
+st.dataframe(df_shooting.head())
 
 """# General
 
@@ -34,20 +103,20 @@ Ada empat dataframe (df_s23, df_s24, df_25, df_gn) pada bagian ini, di mana tiap
 ### Match
 """
 
-# 22/23 Season
-gn_md_df = 'https://fbref.com/en/squads/e4a775cb/2022-2023/matchlogs/c9/schedule/Nottingham-Forest-Scores-and-Fixtures-Premier-League'
-df_s23 = pd.read_html(gn_md_df)
-df_s23 = df_s23[0]
+@st.cache_data
+def load_data():
+    df = pd.read_csv('nottingham_22_23.csv')
+    df = df.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
+    df = df.dropna()
+    df['Round'] = df['Round'].str.replace('Matchweek ', '22/23_')
+    df['Round'] = df['Round'].astype(str)
+    df.set_index('Round', inplace=True)
+    return df
 
-df_s23 = df_s23.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
-df_s23 = df_s23.dropna()
-df_s23['Round'] = df_s23['Round'].str.replace('Matchweek ', '22/23_')
-df_s23['Round'] = df_s23['Round'].astype(str)
-df_s23.set_index('Round', inplace=True)
-df_s23.head()
+df_s23 = load_data()
+st.dataframe(df_s23.head())
 
 # 23/24 Season
-gn_md_df = 'https://fbref.com/en/squads/e4a775cb/2023-2024/matchlogs/c9/schedule/Nottingham-Forest-Scores-and-Fixtures-Premier-League'
 df_s24 = pd.read_html(gn_md_df)
 df_s24 = df_s24[0]
 
@@ -56,11 +125,11 @@ df_s24 = df_s24.dropna()
 df_s24['Round'] = df_s24['Round'].str.replace('Matchweek ', '23/24_')
 df_s24['Round'] = df_s24['Round'].astype(str)
 df_s24.set_index('Round', inplace=True)
+
 df_s24.head()
 
 # 24/25 Season
 # Match
-gn_md_df = 'https://fbref.com/en/squads/e4a775cb/2024-2025/matchlogs/c9/schedule/Nottingham-Forest-Scores-and-Fixtures-Premier-League'
 df_s25 = pd.read_html(gn_md_df)
 df_s25 = df_s25[0]
 
@@ -69,6 +138,7 @@ df_s25 = df_s25.dropna()
 df_s25['Round'] = df_s25['Round'].str.replace('Matchweek ', '24/25_')
 df_s25['Round'] = df_s25['Round'].astype(str)
 df_s25.set_index('Round', inplace=True)
+
 df_s25.head()
 
 # Merge dataframe
@@ -233,9 +303,6 @@ Dataframe utama pada bagian ini, yaitu df_dfd, memiliki beberapa kolom, yaitu:
 """
 
 # Season
-pl_df = 'https://fbref.com/en/comps/9/defense/Premier-League-Stats'
-pl_ss = 'https://fbref.com/en/comps/9/Premier-League-Stats'
-pl_gk = 'https://fbref.com/en/comps/9/keepers/Premier-League-Stats'
 
 df_defend = pd.read_html(pl_df)
 df_defend = df_defend[0]
@@ -431,7 +498,6 @@ Kolom-kolom pada dataframe-dataframe yang digunakan pada bagian ini adalah:
 ### Season 2024/2025
 """
 
-pl_gca = 'https://fbref.com/en/comps/9/gca/Premier-League-Stats'
 df_gca = pd.read_html(pl_gca)
 df_gca = df_gca[0]
 df_gca.tail()
@@ -581,7 +647,6 @@ Kolom-kolom dataframe pada bagian ini adalah:
 ## Import Dataset & Preprocessing
 """
 
-pl_sh = 'https://fbref.com/en/comps/9/shooting/Premier-League-Stats'
 df_sh = pd.read_html(pl_sh)
 df_sh = df_sh[0]
 df_sh.tail()
@@ -654,7 +719,6 @@ Kolom-kolom dataframe yang digunakan pada bagian ini adalah:
 ## Import Dataset & Preprocessing
 """
 
-pl_ps = 'https://fbref.com/en/comps/9/possession/Premier-League-Stats'
 df_ps = pd.read_html(pl_ps)
 df_ps = df_ps[0]
 df_ps.tail()
@@ -750,7 +814,6 @@ Kolom-kolom dataframe yang digunakan pada bagian ini adalah:
 ## Import Dataset & Preprocessing
 """
 
-pl_pass = 'https://fbref.com/en/comps/9/passing/Premier-League-Stats'
 df_pass = pd.read_html(pl_pass)
 df_pass = df_pass[0]
 df_pass.tail()
@@ -804,7 +867,6 @@ Kolom-kolom dataframe yang digunakan pada bagian ini adalah:
 ```
 """
 
-players_shooting = 'https://fbref.com/en/comps/Big5/shooting/players/Big-5-European-Leagues-Stats'
 df_shooting = pd.read_html(players_shooting)
 df_shooting = df_shooting[0]
 df_shooting.tail()
@@ -866,6 +928,8 @@ test
 
 df_gn['Formation']
 
+# !pip install mplsoccer
+
 from mplsoccer import VerticalPitch
 import matplotlib.pyplot as plt
 
@@ -916,6 +980,9 @@ df_gn[['xG', 'xGA']]
 ## Install Library
 """
 
+# !pip install streamlit -q
+# !npm install -g localtunnel
+
 """## Mengubah Dataframe Menjadi file pickle"""
 
 # Mengubah tiap dataframe menjadi pickle
@@ -929,6 +996,8 @@ df_shooting.to_pickle("df_shooting.pkl")
 merge_gcas.to_pickle("merge_gcas.pkl")
 
 """## Implementasi Streamlit"""
+
+!pip install streamlit-bokeh
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%writefile app.py
@@ -1479,9 +1548,10 @@ merge_gcas.to_pickle("merge_gcas.pkl")
 #
 
 # Step 4: Run the Streamlit app and expose it via LocalTunnel
-st.write("Your IP is:", st.experimental_get_query_params())
+# !wget -q -O - ipv4.icanhazip.com
+# !streamlit run app.py & npx localtunnel --port 8501
 
-# !mv "Copy of Midterm Visdat_203012410027_Muhammad Rafi Yanaputeranto_203012410025_Hanif Aditya Pradana_ver2.py" streamlit_app.py
+# !mv "copy_of_midterm_visdat_203012410027_muhammad_rafi_yanaputeranto_203012410025_hanif_aditya_pradana_ver2.py" streamlit_app.py
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%writefile requirements.txt
@@ -1494,4 +1564,3 @@ st.write("Your IP is:", st.experimental_get_query_params())
 # from google.colab import files
 # files.download("streamlit_app.py")
 # files.download("requirements.txt")
-
