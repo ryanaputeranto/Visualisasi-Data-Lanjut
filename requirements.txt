@@ -5,3 +5,4 @@ mplsoccer
 matplotlib
 bokeh
 streamlit-bokeh-events
+lxml
