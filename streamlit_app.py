@@ -103,43 +103,47 @@ Ada empat dataframe (df_s23, df_s24, df_25, df_gn) pada bagian ini, di mana tiap
 ### Match
 """
 
-@st.cache_data
-def load_data():
-    df = pd.read_csv('nottingham_22_23.csv')
-    df = df.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
-    df = df.dropna()
-    df['Round'] = df['Round'].str.replace('Matchweek ', '22/23_')
-    df['Round'] = df['Round'].astype(str)
-    df.set_index('Round', inplace=True)
-    return df
+# @st.cache_data
+# def load_data():
+#     df = pd.read_csv('nottingham_22_23.csv')
+#     df = df.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
+#     df = df.dropna()
+#     df['Round'] = df['Round'].str.replace('Matchweek ', '22/23_')
+#     df['Round'] = df['Round'].astype(str)
+#     df.set_index('Round', inplace=True)
+#     return df
 
-df_s23 = load_data()
-st.dataframe(df_s23.head())
+# df_s23 = load_data()
+# st.dataframe(df_s23.head())
 
 # 23/24 Season
-df_s24 = pd.read_html(gn_md_df)
-df_s24 = df_s24[0]
+# @st.cache_data
+# def load_data():
+#     df = pd.read_csv('nottingham_23_24.csv')
+#     df = df.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
+#     df = df.dropna()
+#     df['Round'] = df['Round'].str.replace('Matchweek ', '23/24_')
+#     df['Round'] = df['Round'].astype(str)
+#     df.set_index('Round', inplace=True)
+#     return df
 
-df_s24 = df_s24.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
-df_s24 = df_s24.dropna()
-df_s24['Round'] = df_s24['Round'].str.replace('Matchweek ', '23/24_')
-df_s24['Round'] = df_s24['Round'].astype(str)
-df_s24.set_index('Round', inplace=True)
-
-df_s24.head()
+# df_s24 = load_data()
+# st.dataframe(df_s24.head())
 
 # 24/25 Season
 # Match
-df_s25 = pd.read_html(gn_md_df)
-df_s25 = df_s25[0]
+# @st.cache_data
+# def load_data():
+#     df = pd.read_csv('nottingham_24_25.csv')
+#     df = df.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
+#     df = df.dropna()
+#     df['Round'] = df['Round'].str.replace('Matchweek ', '24/25_')
+#     df['Round'] = df['Round'].astype(str)
+#     df.set_index('Round', inplace=True)
+#     return df
 
-df_s25 = df_s25.drop(columns=['Date','Time', 'Day', 'Venue','Attendance', 'Captain', 'Referee', 'Match Report', 'Notes'])
-df_s25 = df_s25.dropna()
-df_s25['Round'] = df_s25['Round'].str.replace('Matchweek ', '24/25_')
-df_s25['Round'] = df_s25['Round'].astype(str)
-df_s25.set_index('Round', inplace=True)
-
-df_s25.head()
+# df_s25 = load_data()
+# st.dataframe(df_s25.head())
 
 # Merge dataframe
 df_gn = pd.concat([df_s23, df_s24, df_s25])
