@@ -1,5 +1,7 @@
 streamlit
 pandas
-matplotlib
-seaborn
+scikit-learn
 mplsoccer
+matplotlib
+bokeh
+streamlit-bokeh-events
