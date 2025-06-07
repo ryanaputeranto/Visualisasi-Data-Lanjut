@@ -308,14 +308,11 @@ Dataframe utama pada bagian ini, yaitu df_dfd, memiliki beberapa kolom, yaitu:
 
 # Season
 
-df_defend = pd.read_html(pl_df)
-df_defend = df_defend[0]
+df_defend = pd.read_csv('pl_defense.csv')
 
-df_ss = pd.read_html(pl_ss)
-df_ss = df_ss[0]
+df_ss = pd.read_csv('pl_summary.csv')
 
-df_gk = pd.read_html(pl_gk)
-df_gk = df_gk[0]
+df_gk = pd.read_csv('pl_goalkeeping.csv')
 
 df_defend.columns = [' '.join(col).strip() for col in df_defend.columns]
 df_defend = df_defend.reset_index(drop=True)
