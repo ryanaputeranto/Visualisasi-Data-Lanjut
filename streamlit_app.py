@@ -997,7 +997,7 @@ merge_gcas.to_pickle("merge_gcas.pkl")
 
 """## Implementasi Streamlit"""
 
-!pip install streamlit-bokeh
+# !pip install streamlit-bokeh
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%writefile app.py
