@@ -6,3 +6,4 @@ matplotlib
 bokeh
 streamlit-bokeh-events
 lxml
+requests
