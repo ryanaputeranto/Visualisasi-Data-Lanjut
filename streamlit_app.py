@@ -1479,7 +1479,7 @@ merge_gcas.to_pickle("merge_gcas.pkl")
 #
 
 # Step 4: Run the Streamlit app and expose it via LocalTunnel
-!wget -q -O - ipv4.icanhazip.com
+st.write("Your IP is:", st.experimental_get_query_params())
 !streamlit run app.py & npx localtunnel --port 8501
 
 !mv "Copy of Midterm Visdat_203012410027_Muhammad Rafi Yanaputeranto_203012410025_Hanif Aditya Pradana_ver2.py" streamlit_app.py
