@@ -1,0 +1,5 @@
+streamlit
+pandas
+matplotlib
+seaborn
+# Add any other packages you used
